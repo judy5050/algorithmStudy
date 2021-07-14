@@ -2,48 +2,44 @@
 //  1260.cpp
 //  algo
 //
-//  Created by 박효정 on 2021/03/08.
+//  Created by 박효정 on 2021/07/14.
 //
 
 #include <iostream>
+#include <vector>
+#include <algorithm>
 #include <queue>
-#include <cstring>
+
 using namespace std;
-
-
-int mat[1001][1001];
-int n,m,v;
+vector<int>arr[1001];
 int vis[1001];
-
-void dfs(int v){
-    cout<<v<<' ';
-    vis[v]=1;
-    for(int i=1;i<=n;i++){
-        if(vis[i]==1||mat[v][i]==0){
-            continue;
-        }
-        dfs(i);
-    }
-    
-    
-    
-}
-
-void bfs(int v){
-    
-    queue<int>q;
-    q.push(v);
-    vis[v]=1;
-    while(!q.empty()){
-        v=q.front();
-        cout<<q.front()<<' ';
-        q.pop();
-        for(int i=1;i<=n;i++){
-            if(vis[i]==1||mat[v][i]==0){
-                continue;
+void dfs(int s){
+    if(!arr[s].empty()){
+        for(int i=0;i<arr[s].size();i++){
+            if(vis[arr[s][i]]==0){
+                cout<<arr[s][i]<<' ';
+                vis[arr[s][i]]=1;
+                dfs(arr[s][i]);
+                
             }
-            q.push(i);
-            vis[i]=1;
+        }
+    }
+    
+}
+
+void bfs(int s){
+    queue<int>q;
+    q.push(s);
+    
+    while(!q.empty()){
+        int now=q.front();
+        q.pop();
+        for(int i=0;i<arr[now].size();i++){
+            if(vis[arr[now][i]]==0){
+                q.push(arr[now][i]);
+                cout<<arr[now][i]<<' ';
+                vis[arr[now][i]]=1;
+            }
         }
         
         
@@ -53,27 +49,39 @@ void bfs(int v){
     
     
     
-    
 }
-int main()
-{
-    int x,y;
+int main(){
+    
+    cin.tie(0);
+    cout.tie(0);
+    std::ios::sync_with_stdio(false);
+    
+   
+    
+    int n,m,v;
     cin>>n>>m>>v;
     for(int i=0;i<m;i++){
-        cin>>x>>y;
-        mat[x][y]=mat[y][x]=1;
+        int a,b;
+        cin>>a>>b;
+        arr[a].push_back(b);
+        arr[b].push_back(a);
     }
     
-    dfs(v);
-    cout<<"\n";
-    memset(vis,0, sizeof(vis));
+    for(int i=0;i<n;i++){
+        sort(arr[i].begin(), arr[i].end());
+    }
     
+    cout<<v<<' ';
+    vis[v]=1;
+    dfs(v);
+    fill(vis, vis+1001,0);
+    cout<<"\n";
+    cout<<v<<' ';
+    vis[v]=1;
     bfs(v);
     cout<<"\n";
     
     
     
-    
     return 0;
 }
-
