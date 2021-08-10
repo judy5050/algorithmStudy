@@ -2,17 +2,20 @@
 //  20922.cpp
 //  algo
 //
-//  Created by 박효정 on 2021/06/23.
+//  Created by 박효정 on 2021/08/09.
 //
 
 #include <iostream>
 #include <algorithm>
 #include <vector>
+#define MAX 100000
 
 using namespace std;
 
+int arr[MAX];
+
+
 int main(){
-    
     
     cin.tie(0);
     cout.tie(0);
@@ -20,57 +23,41 @@ int main(){
     
     
     int n,k;
-    
     cin>>n>>k;
     
-    vector<int>v(n,0);
+    vector<int>v(n);
+    
     for(int i=0;i<n;i++){
         cin>>v[i];
     }
-    vector<int>ch(200001,0);
-    
     int lt=0;
     int rt=0;
-    int res=-1;
-    ch[v[rt]]++;
-    while(lt<=rt){
-        
-      
-        
-        if(rt==v.size()){
-           break;
-           
-       }
-        
-        if(ch[v[rt]]>k)
-        {
-            ch[v[lt]]--;
-            lt++;
-        }
-        
-        else {
-            res=max(res,rt-lt+1);
-            rt++;
-            ch[v[rt]]++;
+    int res=0;
+    int len=0;
+    while (lt<n) {
+        if(arr[v[lt]]+1<=k){
+            len++;
+            res=max(len,res);
+            arr[v[lt++]]++;
             
-           
-          
+            
+        }else {
+            len--;
+            arr[v[rt]]--;
+            rt++;
         }
-
-     
-        
-        
-        
-        
-        
-        
-        
-        
+    
         
     }
     
     
     cout<<res<<"\n";
+    
+    
+    
+    
+    
+    
     
     
     
