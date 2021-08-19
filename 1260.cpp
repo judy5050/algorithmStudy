@@ -2,50 +2,66 @@
 //  1260.cpp
 //  algo
 //
-//  Created by 박효정 on 2021/07/14.
+//  Created by 박효정 on 2021/08/19.
 //
 
 #include <iostream>
-#include <vector>
 #include <algorithm>
+#include <vector>
 #include <queue>
 
 using namespace std;
+
 vector<int>arr[1001];
-int vis[1001];
+vector<int>vis(1001);
 void dfs(int s){
-    if(!arr[s].empty()){
+    if(vis[s]==0){
+        cout<<s<<' ';
+        vis[s]=1;
         for(int i=0;i<arr[s].size();i++){
             if(vis[arr[s][i]]==0){
-                cout<<arr[s][i]<<' ';
-                vis[arr[s][i]]=1;
                 dfs(arr[s][i]);
-                
             }
+            
         }
+     
+        
+        
+        
+    }else{
+        return;
     }
     
+    
+    
+    
 }
+
 
 void bfs(int s){
     queue<int>q;
     q.push(s);
-    
+    vis[s]=1;
+    cout<<s<<' ';
     while(!q.empty()){
         int now=q.front();
         q.pop();
         for(int i=0;i<arr[now].size();i++){
             if(vis[arr[now][i]]==0){
-                q.push(arr[now][i]);
                 cout<<arr[now][i]<<' ';
+                q.push(arr[now][i]);
                 vis[arr[now][i]]=1;
             }
+          
+            
         }
         
         
         
         
+        
     }
+    
     
     
     
@@ -56,10 +72,12 @@ int main(){
     cout.tie(0);
     std::ios::sync_with_stdio(false);
     
+    
    
     
     int n,m,v;
     cin>>n>>m>>v;
+    
     for(int i=0;i<m;i++){
         int a,b;
         cin>>a>>b;
@@ -67,19 +85,23 @@ int main(){
         arr[b].push_back(a);
     }
     
-    for(int i=0;i<n;i++){
+    
+    
+    for(int i=1;i<=n;i++){
         sort(arr[i].begin(), arr[i].end());
+        
+        
     }
     
-    cout<<v<<' ';
-    vis[v]=1;
+    fill(vis.begin(),vis.end(), 0);
     dfs(v);
-    fill(vis, vis+1001,0);
     cout<<"\n";
-    cout<<v<<' ';
-    vis[v]=1;
+    fill(vis.begin(),vis.end(), 0);
     bfs(v);
     cout<<"\n";
+    
+    
+    
     
     
     
