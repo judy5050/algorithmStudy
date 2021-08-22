@@ -2,97 +2,106 @@
 //  16918.cpp
 //  algo
 //
-//  Created by 박효정 on 2021/07/25.
+//  Created by 박효정 on 2021/08/22.
 //
 
 #include <iostream>
 #include <vector>
+#include <algorithm>
 #include <queue>
 
 using namespace std;
 
-int arr[201][201];
-int dx[]={0,-1,0,1};
-int dy[]={-1,0,1,0};
+int dx[]={-1,0,0,1};
+int dy[]={0,1,-1,0};
+vector<vector<int>>v(201,vector<int>(201));
 int r,c,n;
-//struct qu{
-//    int x,y,s;
+int t =0;
+//struct ve{
+//    int x,y,val,check;
 //
-//    qu(int a,int b,int c){
+//    ve(int a,int b,int c,int d){
 //        x=a;
 //        y=b;
-//        c=s;
+//        val=c;
+//        check=d;
 //    }
 //
-//    bool operator <(const qu & b) const{
-//        return  s<b.s;
 //
-//    }
+//
+//
 //
 //};
-//
-//priority_queue<qu>pq;
 
-
-void sub(){
+void plusBoom(){
+    t++;
     for(int i=0;i<r;i++){
         for(int j=0;j<c;j++){
-            if(arr[i][j]>0){
-                arr[i][j]-=1;
-            }
+            //폭탄 심기
+            
+                v[i][j]+=1;
+            
+            
         }
     }
     
     
     
+    
+    
+    
 }
 
-void add(){
+void plusTime(){
+    
+    t++;
+    // 1초 흐르는 시간
+    
     for(int i=0;i<r;i++){
         for(int j=0;j<c;j++){
-            if(arr[i][j]==-1){
-                arr[i][j]=3;
+            if(v[i][j]!=-1){
+                v[i][j]+=1;
             }
+            
         }
     }
     
     
 }
+
 void boom(){
-    queue<pair<int,int>>q;
+    
+    plusTime();
+    vector<vector<int>>vis(201,vector<int>(201));
+    queue<pair<int, int>>q;
+    
     for(int i=0;i<r;i++){
         for(int j=0;j<c;j++){
-            if(arr[i][j]==0){
-                arr[i][j]=-1;
-                for(int k=0;k<4;k++){
-                    if(i+dx[k]>=0&&i+dx[k]<r&&j+dy[k]>=0&&j+dy[k]<c){
-                        if(arr[i+dx[k]][j+dy[k]]==0){
-                            q.push({i+dx[k],j+dy[k]});
-                            arr[i+dx[k]][j+dy[k]]=-1;
-                        }
-                        else{
-                            arr[i+dx[k]][j+dy[k]]=-1;
-                        }
-                    }
-                }
+            //터질수 있는 폭탄 추가
+            if(v[i][j]==3){
+                q.push({i,j});
+                v[i][j]=-1;
             }
+            
         }
     }
     
-    while(!q.empty()){
+    
+    while (!q.empty()) {
         int x=q.front().first;
         int y=q.front().second;
         q.pop();
-        for(int k=0;k<4;k++){
-            if(x+dx[k]>=0&&x+dx[k]<r&&y+dy[k]>=0&&y+dy[k]<c){
-                arr[x+dx[k]][dy[k]+y]=-1;
+        for(int i=0;i<4;i++){
+            int nx=x+dx[i];
+            int ny=y+dy[i];
+            if(nx<0||ny<0||nx>=r||ny>=c){
+                continue;
+            }
+            if(vis[nx][ny]==0&&v[nx][ny]!=-1){
+                vis[nx][ny]=1;
+                v[nx][ny]=-1;
             }
         }
-        
-        
-        
-        
-        
     }
     
     
@@ -101,63 +110,71 @@ void boom(){
     
 }
 
+
+
 int main(){
-    
     
     cin.tie(0);
     cout.tie(0);
     std::ios::sync_with_stdio(false);
     
     
-  
+   
+    
     cin>>r>>c>>n;
+    
+ 
+    
     for(int i=0;i<r;i++){
-        for(int j=0;j<c;j++){
-            char ch;
-            cin>>ch;
-            if(ch=='O'){
-                arr[i][j]=3;
-            }else if(ch=='.'){
-                arr[i][j]=-1;
+    
+        string input;
+        cin>>input;
+        for(int j=0;j<input.size();j++){
+            //폭탄이면 0이상의 값
+            if(input[j]=='O'){
+                v[i][j]=0;
+            }else{//폭탄이 아니면 -1
+                v[i][j]=-1;
             }
         }
-    }
-    
-    //처음 아무것도 하지 않음
-    n--;
-    sub();
-    while(n>0){
-        if(n-1>=0){
-            sub();
-            add();
-            n--;
-        }
-        if(n-1>=0){
-            sub();
+          
             
-            boom();
-           
-            n--;
-        }
-        
-        
-        
-        
-        
-        
         
     }
     
+ 
+    
+    //처음 1초 흐름
+    plusTime();
+  
+    while(1){
+        if(t>=n){
+            break;
+        }
+        //폭탄 심기
+        plusBoom();
+        if(t>=n){
+            break;
+        }
+        boom();
+    }
+  
+    
     for(int i=0;i<r;i++){
         for(int j=0;j<c;j++){
-            if(arr[i][j]==-1){
-                cout<<'.';
-            }else{
+            if(v[i][j]!=-1){
                 cout<<'O';
+            }else{
+                cout<<'.';
             }
+            
         }
         cout<<"\n";
     }
+    
+ 
+    
+    
     
     
     return 0;
