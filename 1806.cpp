@@ -2,71 +2,62 @@
 //  1806.cpp
 //  algo
 //
-//  Created by 박효정 on 2021/08/11.
+//  Created by 박효정 on 2021/09/01.
 //
 
 #include <iostream>
 #include <algorithm>
 #include <vector>
-typedef long long ll;
+
 using namespace std;
 
-
-
 int main(){
-    
     
     cin.tie(0);
     cout.tie(0);
     std::ios::sync_with_stdio(false);
     
-    
-    ll n,s;
+    int n,s;
     cin>>n>>s;
+    vector<int>v(n);
     
-    vector<ll>v(n+1);
-    vector<ll>cmp(n+1);
-    ll sum=0;
-    for(int i=1;i<=n;i++){
+    for(int i=0;i<n;i++){
         cin>>v[i];
-        sum+=v[i];
-        cmp[i]=sum;
     }
     
     
-    ll lt=0;
-    ll rt=0;
-    ll cnt=0;
-    ll res=100001;
+    int lt=0;
+    int rt=0;
+    int sum=0;
+    int cnt=0;
+    int res=987654321;
     while(lt<=n){
-        cnt=cmp[lt]-cmp[rt];
-        if(cnt>=s){
-            res=min(res,(lt-rt));
-        }
-        if(cnt<=s){
-            lt++;
+    
+        if(sum<=s){
+          
+            sum+=v[lt++];
+            cnt++;
         }else{
-            rt++;
-           
+            sum-=v[rt++];
+            cnt--;
         }
-      
+        
+        if(sum>=s){
+            res=min(res,cnt);
+        }
+        
+        
         
     }
     
-   
-  
-
-   
     
-    if(res==100001){
-        cout<<0<<"\n";
-    }else{
+    
+    if(res!=987654321){
         cout<<res<<"\n";
+    }else{
+        cout<<0<<"\n";
     }
  
-    
-    
-    
     
     return 0;
 }

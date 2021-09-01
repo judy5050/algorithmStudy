@@ -2,7 +2,7 @@
 //  14501.cpp
 //  algo
 //
-//  Created by 박효정 on 2021/08/03.
+//  Created by 박효정 on 2021/09/01.
 //
 
 #include <iostream>
@@ -11,42 +11,37 @@
 
 using namespace std;
 
-int n;
-int t[17];
 int dp[17];
-int res;
+
 int main(){
     
     cin.tie(0);
     cout.tie(0);
     std::ios::sync_with_stdio(false);
     
-   
+    int n;
+    
+    vector<pair<int, int>>v;
+    v.push_back({0,0});
     cin>>n;
-    int a,b;
     for(int i=1;i<=n;i++){
-        cin>>a>>b;
-        
-        t[i]=a;
-        dp[i]=b;
+        int t,p;
+        cin>>t>>p;
+        v.push_back({t,p});
     }
     
+    int res=0;
     for(int i=n;i>=1;i--){
-        
-        if(t[i]+i>n+1){
-            dp[i]=dp[i+1];
+        if(v[i].first+i<=n+1){
+            dp[i]=max(dp[i+1],dp[i+v[i].first]+v[i].second);
         }else{
-            dp[i]=max(dp[i+1],dp[i]+dp[i+t[i]]);
-            res=max(dp[i],res);
+            dp[i]=max(dp[i+1],0);
         }
-        
-        
-        
+        res=max(res,dp[i]);
     }
+    
     
     cout<<res<<"\n";
-    
-    
     
     return 0;
 }
