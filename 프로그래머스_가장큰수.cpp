@@ -2,49 +2,51 @@
 //  프로그래머스_가장큰수.cpp
 //  algo
 //
-//  Created by 박효정 on 2021/07/07.
+//  Created by 박효정 on 2021/10/06.
 //
-
-#include <iostream>
-#include <algorithm>
-#include <vector>
-#include <cstring>
-#include <cstdlib>
-using namespace std;
 
 #include <string>
 #include <vector>
 #include <algorithm>
-
+#include <cstring>
 
 using namespace std;
 
 
-bool cmp(string &a,string &b){
-    return a+b>b+a;
-}
+struct ve{
+    string str;
+    ve(string a){
+        str=a;
+    }
+    
+    bool operator <(const ve & b) const{
+        if(str[0]!=b.str[0]){
+          return str[0]>b.str[0];
+            
+        }else{
+          return str+b.str>b.str+str;
+        }
+    }
+    
+};
+
 
 string solution(vector<int> numbers) {
     string answer = "";
-    answer="";
-  vector<string>v;
- 
+    vector<ve>s;
     for(int i=0;i<numbers.size();i++){
-        v.push_back(to_string(numbers[i]));
+        s.push_back(ve(to_string(numbers[i])));
     }
+    sort(s.begin(),s.end());
     
-    sort(v.begin(), v.end(),cmp);
-    
-    if(v[0]=="0"){
-        answer="0";
-        
-    }else{
-        for(int i=0;i<numbers.size();i++){
-        answer+=v[i];
-    }
-    }
 
+        for(int i=0;i<s.size();i++){
+            answer+=s[i].str;
+        }
     
-    
+    if(answer[0]=='0'){
+        answer="0";
+    }
+ 
     return answer;
 }
